@@ -17,15 +17,17 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-class RegisterView(CreateView):
-    form_class = UserCreationForm
-    template_name = 'register.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/') 
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('/')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'register.html', {'form': form})
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
