@@ -10,8 +10,8 @@ from .models import Book, Library, Librarian
 books = Book.objects.get(author="Name")
 print(books.author)
 
-books = Library.objects.get(books)
-print(books.books)
+books = Library.objects.get(name=library_name)
+print(books.all())
 
 librarian = Librarian.objects.all()
 print(librarian.library)
