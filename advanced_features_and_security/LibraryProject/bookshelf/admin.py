@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Book, CustomUser
+from django.apps import AppConfig
 
 # Register your models here.
 
@@ -30,6 +31,13 @@ class CustomUserAdmin(UserAdmin):
             "fields": ("email", "first_name", "last_name", "date_of_birth", "profile_photo", "password1", "password2"),
         }),
     )
+
+class BookshelfConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "bookshelf"
+
+    def ready(self):
+        import bookshelf.signals
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Book, BookAdmin)
