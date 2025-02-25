@@ -25,3 +25,30 @@ We set up the following groups:
 4. Log in with different users and attempt to access views.
 
 **Now the bookshelf app has a secure permission-based access control system**
+
+
+# Security Best Practices in LibraryProject
+
+## 1. Configured Secure Settings
+- **`DEBUG = False`** in production.
+- Enforced **XSS Protection** (`SECURE_BROWSER_XSS_FILTER`).
+- Clickjacking prevention with **X-Frame-Options** (`DENY`).
+- **CSRF and Session cookies secured over HTTPS**.
+
+## 2. Protected Forms Against CSRF
+- **All forms include `{% csrf_token %}`** to prevent CSRF attacks.
+
+## 3. Secure Data Access in Views
+- **SQL Injection Prevention**: Queries use Django ORM, not raw SQL.
+- **Django Forms Used** to validate user input safely.
+
+## 4. Implemented Content Security Policy (CSP)
+- **`django-csp`** middleware restricts JavaScript & styles to prevent XSS.
+
+## 5. Testing Security Measures
+- **Manual Testing**:
+  - Ensured unauthorized users cannot access views.
+  - Checked forms for CSRF protection.
+  - Verified CSP headers in browser.
+
+**Django app secured**

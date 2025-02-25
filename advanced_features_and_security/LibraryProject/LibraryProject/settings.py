@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -23,13 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0(rf%tcgl8mq*@+w2kx43^g$rnya=f2g%ekqj9d!uaoz0ix*5+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # Ensure this is set to False in production
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["127.0.0.1", "domain.com"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +37,7 @@ INSTALLED_APPS = [
     
     'bookshelf',
     'relationship_app',
+    'csp',  # Added for Content Security Policy
 ]
 
 MIDDLEWARE = [
@@ -50,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',  # Added CSP Middleware
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -72,10 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -83,10 +80,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -102,10 +97,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -114,23 +107,38 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect after login/logout
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
 
-
 # Custom user model
 AUTH_USER_MODEL = "bookshelf.CustomUser"
 
+# Security settings
+SECURE_BROWSER_XSS_FILTER = True  # Prevent cross-site scripting attacks
+X_FRAME_OPTIONS = "DENY"  # Prevent clickjacking attacks
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing
 
+# CSRF & Session Security
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookie is sent over HTTPS only
+SESSION_COOKIE_SECURE = True  # Ensures session cookie is sent over HTTPS only
+CSRF_COOKIE_HTTPONLY = True  # Prevents CSRF cookie from being accessed via JavaScript
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)  # Restricts external content
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")  # Restricts script sources
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # Restricts CSS sources
+CSP_IMG_SRC = ("'self'", "data:")  # Restricts image sources
+
+# Secure HSTS (Strict Transport Security) settings
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
