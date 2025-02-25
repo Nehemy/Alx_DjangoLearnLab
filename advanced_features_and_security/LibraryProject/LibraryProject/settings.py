@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-0(rf%tcgl8mq*@+w2kx43^g$rnya=f2g%ekqj9d!uaoz0ix*5+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # Ensure this is set to False in production
 
-ALLOWED_HOSTS = ["127.0.0.1", "domain.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "yourdomain.com"]  # Replace with actual domain
 
 # Application definition
 INSTALLED_APPS = [
@@ -123,14 +123,19 @@ LOGOUT_REDIRECT_URL = "/login/"
 AUTH_USER_MODEL = "bookshelf.CustomUser"
 
 # Security settings
-SECURE_BROWSER_XSS_FILTER = True  # Prevent cross-site scripting attacks
+SECURE_SSL_REDIRECT = True  # Redirect all non-HTTPS requests to HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains in HSTS policy
+SECURE_HSTS_PRELOAD = True  # Allow preloading of HSTS policy
+
+# Enforce secure cookies
+SESSION_COOKIE_SECURE = True  # Ensures session cookie is sent over HTTPS only
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookie is sent over HTTPS only
+
+# Secure Headers
 X_FRAME_OPTIONS = "DENY"  # Prevent clickjacking attacks
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing
-
-# CSRF & Session Security
-CSRF_COOKIE_SECURE = True  # Ensures CSRF cookie is sent over HTTPS only
-SESSION_COOKIE_SECURE = True  # Ensures session cookie is sent over HTTPS only
-CSRF_COOKIE_HTTPONLY = True  # Prevents CSRF cookie from being accessed via JavaScript
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser’s XSS filtering
 
 # Content Security Policy (CSP)
 CSP_DEFAULT_SRC = ("'self'",)  # Restricts external content
