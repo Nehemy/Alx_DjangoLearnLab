@@ -147,3 +147,6 @@ CSP_IMG_SRC = ("'self'", "data:")  # Restricts image sources
 SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
+# Secure Proxy SSL Header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Ensure Django recognizes HTTPS requests behind a proxy
