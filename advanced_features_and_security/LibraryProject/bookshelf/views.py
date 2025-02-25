@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import ListView
 from django.db.models import Q
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm, ExampleForm
+
 
 @login_required
 @permission_required("bookshelf.can_view", raise_exception=True)
