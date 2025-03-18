@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+
+<h2>Profile</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" >Update Profile</button>
+</form>
+
+{% if form.errors %}
+<p>There were errors updating your profile. Please try again.</p>
+{% endif %}
+{% endblock  %}
