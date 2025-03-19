@@ -15,7 +15,7 @@ urlpatterns = [
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
     
-    path('tags/<str:tag_name>/', TagPostListView.as_view(), name='posts-by-tag'),
+    path('tags/<slug:tag_slug>/', TagPostListView.as_view(), name='posts-by-tag'),
     path('search/', SearchResultsView.as_view(), name='search-results'),
     
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
