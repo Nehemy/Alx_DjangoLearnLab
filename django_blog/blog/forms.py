@@ -28,3 +28,20 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('title', 'content')
+
+class CommentForm(forms.ModelForm):
+    
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {'content': forms.Textarea(
+            attrs={'rows': 4, 
+                'cols': 20, 
+                'placeholder': 'Enter your comment here...'}
+            ),}
+        
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if not content or content.strip() == '':
+            raise forms.ValidationError("Comment cannot be empty.")
+        return content
