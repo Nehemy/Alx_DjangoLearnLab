@@ -137,9 +137,13 @@ class SearchResultsView(ListView):
     
     def get_queryset(self):
         query = self.request.GET.get('q')
-        return Post.objects.filter(
-            Q(title__icontains=query) | Q(content__icontains=query)
-        ).distinct()
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return Post.objects.none()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
