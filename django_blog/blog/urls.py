@@ -15,6 +15,9 @@ urlpatterns = [
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
     
+    path('tags/<str:tag_name>/', TagPostListView.as_view(), name='posts-by-tag'),
+    path('search/', SearchResultsView.as_view(), name='search-results'),
+    
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='blog/logged_out.html'), name='logout'),
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='registration/password_change_form.html'), name='password_change'),

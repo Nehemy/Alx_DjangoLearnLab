@@ -3,6 +3,12 @@
 {% block title %}All Posts{% endblock %}
 
 {% block content %}
+
+<form method="get" action="{% url 'search-results' %}">
+  <input type="text" name="q" placeholder="Search posts...">
+  <button type="submit">Search</button>
+</form>
+
   <h2>All Blog Posts</h2>
   {% for post in posts %}
     <div class="post">

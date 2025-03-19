@@ -14,6 +14,16 @@
     <a href="{% url 'post-delete' post.pk %}">Delete Post</a>
   </div>
   {% endif %}
+
+  <div class="post-tags">
+    <p>Tags:
+      {% for tag in post.tags.all %}
+        <a href="{% url 'posts-by-tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        No tags.
+      {% endfor %}
+    </p>
+  </div>
   
   <section id="comments">
     <h3>Comments</h3>
