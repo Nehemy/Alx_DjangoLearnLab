@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
@@ -30,20 +30,18 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, pk, *args, **kwargs):
          post = get_object_or_404(Post, pk=pk)
-         user = request.user
-         if Like.objects.filter(user=user, post=post).exists():
+         like, created = Like.objects.get_or_create(user=request.user, post=post)
+         if not created:
              return Response({'detail': 'Already liked.'}, status=status.HTTP_400_BAD_REQUEST)
-         Like.objects.create(user=user, post=post)
-         if post.author != user:
-             Notification.objects.create(recipient=post.author, actor=user, verb='liked', target=post)
+         if post.author != request.user:
+             Notification.objects.create(recipient=post.author, actor=request.user, verb='liked', target=post)
          return Response({'detail': 'Post liked.'}, status=status.HTTP_200_OK)
 
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, pk, *args, **kwargs):
          post = get_object_or_404(Post, pk=pk)
-         user = request.user
-         like = Like.objects.filter(user=user, post=post).first()
+         like = Like.objects.filter(user=request.user, post=post).first()
          if not like:
              return Response({'detail': 'Not liked yet.'}, status=status.HTTP_400_BAD_REQUEST)
          like.delete()
