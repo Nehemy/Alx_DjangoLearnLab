@@ -31,6 +31,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, user_id, *args, **kwargs):
         try:
@@ -41,6 +42,7 @@ class FollowUserView(generics.GenericAPIView):
         return Response({'detail': 'Followed successfully.'}, status=status.HTTP_200_OK)
 
 class UnfollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, user_id, *args, **kwargs):
         try:
