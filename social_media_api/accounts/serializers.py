@@ -9,13 +9,14 @@ User = get_user_model()
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('username', 'password', 'email', 'bio', 'profile_picture')
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = get_user_model().objects.create_user(**validated_data)
+        Token.objects.create(user=user)
         return user
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('username', 'email', 'bio', 'profile_picture', 'followers')
