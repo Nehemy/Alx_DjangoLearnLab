@@ -1,7 +1,6 @@
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
@@ -29,7 +28,7 @@ class FeedView(generics.ListAPIView):
 class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, pk, *args, **kwargs):
-         post = get_object_or_404(Post, pk=pk)
+         post = generics.get_object_or_404(Post, pk=pk)
          like, created = Like.objects.get_or_create(user=request.user, post=post)
          if not created:
              return Response({'detail': 'Already liked.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -40,7 +39,7 @@ class LikePostView(generics.GenericAPIView):
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, pk, *args, **kwargs):
-         post = get_object_or_404(Post, pk=pk)
+         post = generics.get_object_or_404(Post, pk=pk)
          like = Like.objects.filter(user=request.user, post=post).first()
          if not like:
              return Response({'detail': 'Not liked yet.'}, status=status.HTTP_400_BAD_REQUEST)
